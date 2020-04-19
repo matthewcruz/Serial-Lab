@@ -50,16 +50,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>12521C5E5DAA8047FAD226489D27672FCAD2327C</ManifestCertificateThumbprint>
+    <!-- <ManifestCertificateThumbprint>12521C5E5DAA8047FAD226489D27672FCAD2327C</ManifestCertificateThumbprint> -->
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Serial Lab.pfx</ManifestKeyFile>
+    <!-- <ManifestKeyFile>Serial Lab.pfx</ManifestKeyFile> -->
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <!-- <GenerateManifests>true</GenerateManifests> -->
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <!-- <SignManifests>true</SignManifests> -->
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>

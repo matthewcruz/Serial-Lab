@@ -25,13 +25,16 @@ namespace Seriallab
 {
     public partial class MainForm : Form
     {
-        public string data{ get; set; }
+        public string data { get; set; }
+        public string newData { get; set; }
+        public string oldData { get; set; } = "";
         int graph_scaler = 500;
         int send_repeat_counter = 0;
         bool send_data_flag = false;
         bool plotter_flag = false;
         System.IO.StreamWriter out_file;
         System.IO.StreamReader in_file;
+        int[] chartScales = { 0, 0, 0, 0, 0 };
 
         public MainForm()
         {
@@ -41,14 +44,14 @@ namespace Seriallab
 
         public void configrations()
         {
-           portConfig.Items.AddRange(SerialPort.GetPortNames());
+            portConfig.Items.AddRange(SerialPort.GetPortNames());
             baudrateConfig.DataSource = new[] { "115200", "19200", "230400", "57600", "38400", "9600", "4800" };
             parityConfig.DataSource = new[] { "None", "Odd", "Even", "Mark", "Space" };
             databitsConfig.DataSource = new[] { "5", "6", "7", "8" };
             stopbitsConfig.DataSource = new[] { "1", "2", "1.5" };
             flowcontrolConfig.DataSource = new[] { "None", "RTS", "RTS/X", "Xon/Xoff" };
             //portConfig.SelectedIndex = 0;
-            baudrateConfig.SelectedIndex = 5;
+            baudrateConfig.SelectedIndex = 0;
             parityConfig.SelectedIndex = 0;
             databitsConfig.SelectedIndex = 3;
             stopbitsConfig.SelectedIndex = 0;
@@ -60,9 +63,14 @@ namespace Seriallab
             backgroundWorker1.DoWork += new DoWorkEventHandler(update_rxtextarea_event);
             tabControl1.Selected += new TabControlEventHandler(tabControl1_Selecting);
 
+            graph.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
+            graph.ChartAreas[0].AxisY2.Maximum = 50;
+            graph.ChartAreas[0].AxisY.Maximum = 300;
+            graph.ChartAreas[0].AxisY.Minimum = -300;
+
+
             for (int i = 0; i < 5 && i < 5; i++)
                 graph.Series[i].Points.Add(0);
-
         }
 
         /*connect and disconnect*/
@@ -115,7 +123,7 @@ namespace Seriallab
                     try { out_file.Dispose(); }
                     catch {/*ignore*/ }
 
-                try {in_file.Dispose();}
+                try { in_file.Dispose(); }
                 catch {/*ignore*/ }
 
                 UserControl_state(false);
@@ -123,12 +131,20 @@ namespace Seriallab
         }
 
         /* RX -----*/
+        private void someMethod()
+        {
+            ;
+        }
 
         /* read data from serial */
         private void rx_data_event(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             if (mySerial.IsOpen)
             {
+                //System.Timers.Timer _delayTimer = new System.Timers.Timer();
+                //_delayTimer.Interval = 10;
+                //_delayTimer.Elapsed += (o, e) => someMethod();
+                //_delayTimer.Start();
                 try
                 {
                     int dataLength = mySerial.BytesToRead;
@@ -136,22 +152,82 @@ namespace Seriallab
                     int nbytes = mySerial.Read(dataRecevied, 0, dataLength);
                     if (nbytes == 0) return;
 
+
                     if (datalogger_checkbox.Checked)
                     {
                         try
-                        { out_file.Write(data.Replace("\\n", Environment.NewLine)); }
+                        {
+                            if (oldData == "")
+                            {
+                                out_file.Write(data + "\n");//.Replace("\\n", Environment.NewLine));
+                            }
+                        }// data.Replace("\\n", Environment.NewLine)); }
                         catch { alert("Can't write to " + datalogger_checkbox.Text + " file it might be not exist or it is opennd in another program"); return; }
                     }
 
 
                     this.BeginInvoke((Action)(() =>
                     {
-                        data = System.Text.Encoding.Default.GetString(dataRecevied);
+                        newData = System.Text.Encoding.Default.GetString(dataRecevied);
+                        /*data is in format of a string
+                        newData = is the incoming data to be checked
+                        oldData = is the data that is leftover*/
+
+                        string[] checkData = newData.Split('\n');
+                        int newDataLength = checkData.Length;
+                        //data = "";                              //null data situation
+
+                        if (oldData == "")
+                        {
+                            //previous data was complete, check new data
+                            if (newData.EndsWith("\n") && newDataLength == 1) //Does the data end with "\n", is there only one "\n"
+                            {
+                                //Data is complete, assign to data
+                                data = checkData[0];
+                                oldData = "";
+                            }
+                            else if (newDataLength > 1)
+                            {
+                                //There is extra data, but the first index of the array is valid
+                                data = checkData[0];
+                                oldData = checkData[newDataLength - 1];
+                            }
+                            else if (!newData.EndsWith("\n"))
+                            {
+                                //Data is not complete save for next time
+                                oldData = checkData[0];
+                                return;
+                            }
+                        }
+
+                        else
+                        {
+                            //build data, check new data
+                            //capture new data and add to old data
+                            if (newData.EndsWith("\n") && newDataLength == 1)
+                            {
+                                data = oldData + checkData[0];
+                                oldData = "";
+                            }
+                            else if (newDataLength > 1)
+                            {
+                                //There is extra data, but the first index of the array is valid
+                                data = oldData + checkData[0];
+                                oldData = checkData[newDataLength - 1];
+                            }
+                            else if (!newData.EndsWith("\n"))
+                            {
+                                //Data is not complete save for next time
+                                oldData = oldData + checkData[0];
+                                return;
+                            }
+                        }
+                        //data is now in format of of string
 
                         if (!plotter_flag && !backgroundWorker1.IsBusy)
                         {
                             if (display_hex_radiobutton.Checked)
-                                data = BitConverter.ToString(dataRecevied);
+                                data = BitConverter.ToString(dataRecevied);           //data is converted to hex for Hex output
 
                             backgroundWorker1.RunWorkerAsync();
                         }
@@ -159,16 +235,25 @@ namespace Seriallab
                         else if (plotter_flag)
                         {
                             double number;
-                            string[] variables = data.Split('\n')[0].Split(',');
+
+                            //Data should already be parsed at this point from above
+
+                            string[] variables = data.Split(',');
+
                             for (int i = 0; i < variables.Length && i < 5; i++)
                             {
+
                                 if (double.TryParse(variables[i], out number))
                                 {
                                     if (graph.Series[i].Points.Count > graph_scaler)
                                         graph.Series[i].Points.RemoveAt(0);
                                     graph.Series[i].Points.Add(number);
+                                    //Console.Write(number);
+                                    //Console.Write(",");
+
                                 }
                             }
+                            //Console.WriteLine();
                             graph.ResetAutoValues();
                         }
                     }));
@@ -232,8 +317,8 @@ namespace Seriallab
             if (!send_data_flag)
             {
                 tx_repeater_delay.Interval = (int)send_delay.Value;
-                tx_repeater_delay.Start();       
-               
+                tx_repeater_delay.Start();
+
                 if (send_word_radiobutton.Checked)
                 {
                     progressBar1.Maximum = (int)send_repeat.Value;
@@ -270,11 +355,11 @@ namespace Seriallab
                 progressBar1.Visible = false;
                 tx_num_panel.Enabled = true;
                 tx_textarea.Enabled = true;
-                tx_radiobuttons_panel.Enabled = true;     
+                tx_radiobuttons_panel.Enabled = true;
                 sendData.Text = "Send";
                 if (write_form_file_radiobutton.Checked)
                     try { in_file.Dispose(); }
-                    catch { } 
+                    catch { }
             }
         }
 
@@ -299,7 +384,7 @@ namespace Seriallab
             {
                 try { tx_data = in_file.ReadLine(); }
                 catch { }
-                
+
                 if (tx_data == null)
                     send_data_flag = false;
                 else
@@ -316,9 +401,9 @@ namespace Seriallab
                 {
                     try
                     {
-                        
+
                         mySerial.Write(tx_data.Replace("\\n", Environment.NewLine));
-                        tx_terminal.AppendText("[TX]> " + tx_data+"\n");
+                        tx_terminal.AppendText("[TX]> " + tx_data + "\n");
                     }
                     catch
                     {
@@ -354,7 +439,7 @@ namespace Seriallab
                     tx_terminal.AppendText("[TX]> " + e.KeyChar.ToString() + "\n");
                     tx_textarea.Clear();
                 }
-                catch {alert("Can't write to "+mySerial.PortName+" port it might be opennd in another program"); }
+                catch { alert("Can't write to " + mySerial.PortName + " port it might be opennd in another program"); }
             }
         }
 
@@ -419,7 +504,7 @@ namespace Seriallab
                     graph_max.Value = (int)graph.ChartAreas[0].AxisY.Maximum;
                     graph.ChartAreas[0].AxisY.Maximum = (int)graph_max.Value;
                 }
-                catch {alert("Invalid Minimum value");}
+                catch { alert("Invalid Minimum value"); }
             else
                 graph.ChartAreas[0].AxisY.Maximum = Double.NaN;
 
@@ -471,10 +556,11 @@ namespace Seriallab
         /*serial port config*/
         private bool Serial_port_config()
         {
-            try {mySerial.PortName = portConfig.Text; }
-            catch { alert("There are no available ports"); return false;}
+            try { mySerial.PortName = portConfig.Text; }
+            catch { alert("There are no available ports"); return false; }
             mySerial.BaudRate = (Int32.Parse(baudrateConfig.Text));
             mySerial.StopBits = (StopBits)Enum.Parse(typeof(StopBits), (stopbitsConfig.SelectedIndex + 1).ToString(), true);
+            //mySerial.StopBits = (StopBits)Enum.Parse(typeof(StopBits), (stopbitsConfig.SelectedIndex+1).ToString(), true);
             mySerial.Parity = (Parity)Enum.Parse(typeof(Parity), parityConfig.SelectedIndex.ToString(), true);
             mySerial.DataBits = (Int32.Parse(databitsConfig.Text));
             mySerial.Handshake = (Handshake)Enum.Parse(typeof(Handshake), flowcontrolConfig.SelectedIndex.ToString(), true);
@@ -490,7 +576,7 @@ namespace Seriallab
 
             if (value)
             {
-                connect.Text = "Disconnected";
+                connect.Text = "Disconnect";
                 toolStripStatusLabel1.Text = "Connected port: " + mySerial.PortName + " @ " + mySerial.BaudRate + " bps";
             }
             else
@@ -519,7 +605,7 @@ namespace Seriallab
         {
             alert_messege.Icon = Icon;
             alert_messege.Visible = true;
-            alert_messege.ShowBalloonTip(5000, "Serial Lab", text, ToolTipIcon.Error);
+            alert_messege.ShowBalloonTip(5000, "ABCD Serial Logger", text, ToolTipIcon.Error);
         }
         /*about box*/
         private void toolStripStatusLabel2_Click(object sender, EventArgs e)
@@ -542,7 +628,7 @@ namespace Seriallab
         private int file_size(string path)
         {
             var file = new StreamReader(path).ReadToEnd();
-            string [] lines = file.Split(new char[] { '\n' });
+            string[] lines = file.Split(new char[] { '\n' });
             int count = lines.Count();
             return count;
         }
@@ -551,8 +637,68 @@ namespace Seriallab
         {
             tx_terminal.Clear();
         }
+
+        private void series1_Axis_Checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (series1_Axis_Checkbox.Checked)
+            {
+                graph.Series[0].YAxisType = AxisType.Secondary;
+            }
+            else
+            {
+                graph.Series[0].YAxisType = AxisType.Primary;
+            }
+        }
+
+        private void series2_Axis_Checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (series2_Axis_Checkbox.Checked)
+            {
+                graph.Series[1].YAxisType = AxisType.Secondary;
+            }
+            else
+            {
+                graph.Series[1].YAxisType = AxisType.Primary;
+            }
+        }
+
+        private void series3_Axis_Checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (series3_Axis_Checkbox.Checked)
+            {
+                graph.Series[2].YAxisType = AxisType.Secondary;
+            }
+            else
+            {
+                graph.Series[2].YAxisType = AxisType.Primary;
+            }
+        }
+
+        private void series4_Axis_Checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (series4_Axis_Checkbox.Checked)
+            {
+                graph.Series[3].YAxisType = AxisType.Secondary;
+            }
+            else
+            {
+                graph.Series[3].YAxisType = AxisType.Primary;
+            }
+        }
+
+        private void series5_Axis_Checkbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (series5_Axis_Checkbox.Checked)
+            {
+                graph.Series[4].YAxisType = AxisType.Secondary;
+            }
+            else
+            {
+                graph.Series[4].YAxisType = AxisType.Primary;
+            }
+        }
     }
-  }
+}
 
 
 
