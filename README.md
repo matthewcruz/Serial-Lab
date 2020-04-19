@@ -57,16 +57,16 @@ In order to log serial data, check the 'Data Logger' checkbox and select the des
  -->
 ## Download  
 Available versions  
-[**SerialLabSetupV1.0.0.msi**](https://github.com/ahmedelsayed93/Serial-Lab/raw/master/SerialLabSetupV1.0.0.msi)
+[**SerialLabSetupV1.0.0.msi**](https://github.com/ahmedelsayed93/Serial-Lab/raw/master/SerialLabSetupV1.0.0.msi)  
 [**SerialLabSetupV1.1.0.msi**](https://github.com/matthewcruz/Serial-Lab/raw/master/SerialLabSetupV1.1.0.msi)
 
 ## Author
 **Ahmed El-Sayed**  
 [**ahmed.m.elsayed93@gmail.com**](mailto:ahmed.m.elsayed93@gmail.com) 
 
-## Contributor(s) 
-**Matthew Cruz**
-[**mattcruz10@gmail.com**](mattcruz10@gmail.com)
+## Contributor(s)   
+**Matthew Cruz**  
+[**mattcruz10@gmail.com**](mattcruz10@gmail.com)  
 
 ## License
 Licensed under the **GNU GPLv3**  
