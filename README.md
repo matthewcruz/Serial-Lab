@@ -53,7 +53,7 @@ and the result will be as shown in the image below
 <img src="/imgs/plotter.png" width="500">  
   
 ## How to Log Serial Data?  
-In order to log serial data, check the 'Data Logger' checkbox and select the desired output file, or create a new .txt or .csv file.  
+In order to log serial data, check the 'Data Logger' checkbox then either select the desired output file, or create a new .txt or .csv file. Then click 'OK' in the file dialog.
 
 ## Download  
 Available versions  
