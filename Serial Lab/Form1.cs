@@ -34,7 +34,6 @@ namespace Seriallab
         bool plotter_flag = false;
         System.IO.StreamWriter out_file;
         System.IO.StreamReader in_file;
-        int[] chartScales = { 0, 0, 0, 0, 0 };
 
         public MainForm()
         {
@@ -45,29 +44,27 @@ namespace Seriallab
         public void configrations()
         {
             portConfig.Items.AddRange(SerialPort.GetPortNames());
-            baudrateConfig.DataSource = new[] { "115200", "19200", "230400", "57600", "38400", "9600", "4800" };
-            parityConfig.DataSource = new[] { "None", "Odd", "Even", "Mark", "Space" };
-            databitsConfig.DataSource = new[] { "5", "6", "7", "8" };
-            stopbitsConfig.DataSource = new[] { "1", "2", "1.5" };
-            flowcontrolConfig.DataSource = new[] { "None", "RTS", "RTS/X", "Xon/Xoff" };
-            //portConfig.SelectedIndex = 0;
-            baudrateConfig.SelectedIndex = 0;
-            parityConfig.SelectedIndex = 0;
-            databitsConfig.SelectedIndex = 3;
-            stopbitsConfig.SelectedIndex = 0;
+            baudrateConfig.DataSource       = new[] { "115200", "19200", "230400", "57600", "38400", "9600", "4800" };
+            parityConfig.DataSource         = new[] { "None", "Odd", "Even", "Mark", "Space" };
+            databitsConfig.DataSource       = new[] { "5", "6", "7", "8" };
+            stopbitsConfig.DataSource       = new[] { "1", "2", "1.5" };
+            flowcontrolConfig.DataSource    = new[] { "None", "RTS", "RTS/X", "Xon/Xoff" };
+            baudrateConfig.SelectedIndex    = 0;
+            parityConfig.SelectedIndex      = 0;
+            databitsConfig.SelectedIndex    = 3;
+            stopbitsConfig.SelectedIndex    = 0;
             flowcontrolConfig.SelectedIndex = 0;
-            openFileDialog1.Filter = "Text|*.txt";
+            openFileDialog1.Filter          = "Text|*.txt";
 
             mySerial.DataReceived += rx_data_event;
             tx_repeater_delay.Tick += new EventHandler(send_data);
             backgroundWorker1.DoWork += new DoWorkEventHandler(update_rxtextarea_event);
             tabControl1.Selected += new TabControlEventHandler(tabControl1_Selecting);
 
-            graph.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
-            graph.ChartAreas[0].AxisY2.Maximum = 50;
-            graph.ChartAreas[0].AxisY.Maximum = 300;
-            graph.ChartAreas[0].AxisY.Minimum = -300;
-
+            graph.ChartAreas[0].AxisY2.Enabled  = AxisEnabled.True;
+            graph.ChartAreas[0].AxisY2.Maximum  = 65;
+            graph.ChartAreas[0].AxisY.Maximum   = 300;
+            graph.ChartAreas[0].AxisY.Minimum   = -300;
 
             for (int i = 0; i < 5 && i < 5; i++)
                 graph.Series[i].Points.Add(0);
@@ -131,20 +128,11 @@ namespace Seriallab
         }
 
         /* RX -----*/
-        private void someMethod()
-        {
-            ;
-        }
-
         /* read data from serial */
         private void rx_data_event(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
             if (mySerial.IsOpen)
             {
-                //System.Timers.Timer _delayTimer = new System.Timers.Timer();
-                //_delayTimer.Interval = 10;
-                //_delayTimer.Elapsed += (o, e) => someMethod();
-                //_delayTimer.Start();
                 try
                 {
                     int dataLength = mySerial.BytesToRead;
@@ -161,7 +149,7 @@ namespace Seriallab
                             {
                                 out_file.Write(data + "\n");//.Replace("\\n", Environment.NewLine));
                             }
-                        }// data.Replace("\\n", Environment.NewLine)); }
+                        }
                         catch { alert("Can't write to " + datalogger_checkbox.Text + " file it might be not exist or it is opennd in another program"); return; }
                     }
 
@@ -175,7 +163,6 @@ namespace Seriallab
 
                         string[] checkData = newData.Split('\n');
                         int newDataLength = checkData.Length;
-                        //data = "";                              //null data situation
 
                         if (oldData == "")
                         {
@@ -228,6 +215,7 @@ namespace Seriallab
                         {
                             if (display_hex_radiobutton.Checked)
                                 data = BitConverter.ToString(dataRecevied);           //data is converted to hex for Hex output
+                                data += "\n";
 
                             backgroundWorker1.RunWorkerAsync();
                         }
@@ -581,7 +569,7 @@ namespace Seriallab
             }
             else
             {
-                connect.Text = "Connected";
+                connect.Text = "Connect";
                 toolStripStatusLabel1.Text = "No Connection";
             }
         }
