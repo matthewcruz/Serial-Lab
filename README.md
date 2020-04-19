@@ -52,9 +52,9 @@ and the result will be as shown in the image below
   
 <img src="/imgs/plotter.png" width="500">  
 
-## How to Log Serial Data?
+<!-- ## How to Log Serial Data?
 In order to log serial data, check the 'Data Logger' checkbox and select the desired output file, or create a new .txt or .csv file.
-
+ -->
 ## Download  
 Available versions  
 [**SerialLabSetupV1.0.0.msi**](https://github.com/ahmedelsayed93/Serial-Lab/raw/master/SerialLabSetupV1.0.0.msi)
