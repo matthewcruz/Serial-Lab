@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serial Lab", "Serial Lab\Se
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SerialLabInstallerv1.1.0", "SerialLabInstallerv1.1.0\SerialLabInstallerv1.1.0.vdproj", "{3BA6E050-57D5-41F0-B98F-E9D2B98249D3}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SerialLabInstallerV1.2.0", "SerialLabInstallerV1.2.0\SerialLabInstallerV1.2.0.vdproj", "{A5B5A8B8-2512-49A9-AE17-231FC13E682C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,8 @@ Global
 		{28916F23-4251-4AA5-8E03-D21D33510FB6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3BA6E050-57D5-41F0-B98F-E9D2B98249D3}.Debug|Any CPU.ActiveCfg = Debug
 		{3BA6E050-57D5-41F0-B98F-E9D2B98249D3}.Release|Any CPU.ActiveCfg = Release
+		{A5B5A8B8-2512-49A9-AE17-231FC13E682C}.Debug|Any CPU.ActiveCfg = Debug
+		{A5B5A8B8-2512-49A9-AE17-231FC13E682C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

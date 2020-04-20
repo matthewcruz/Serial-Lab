@@ -57,7 +57,8 @@ In order to log serial data, check the 'Data Logger' checkbox then either select
 
 ## Download  
 Available versions  
-[**SerialLabSetupV1.1.0.msi**](https://github.com/matthewcruz/Serial-Lab/raw/master/SerialLabSetupV1.1.0.msi)  
+[**SerialLabSetupV1.2.0.msi**](https://github.com/matthewcruz/Serial-Lab/raw/master/SerialLabSetupV1.2.0.msi)  (Fixed Data Drop)  
+[**SerialLabSetupV1.1.0.msi**](https://github.com/matthewcruz/Serial-Lab/raw/master/SerialLabSetupV1.1.0.msi) (Fixed Parsing)  
 [**SerialLabSetupV1.0.0.msi**](https://github.com/ahmedelsayed93/Serial-Lab/raw/master/SerialLabSetupV1.0.0.msi)  
 
 
