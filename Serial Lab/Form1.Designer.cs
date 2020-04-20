@@ -85,6 +85,14 @@
             this.sendData = new System.Windows.Forms.Button();
             this.tx_textarea = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.series5_Axis_Checkbox = new System.Windows.Forms.CheckBox();
+            this.series4_Axis_Checkbox = new System.Windows.Forms.CheckBox();
+            this.series3_Axis_Checkbox = new System.Windows.Forms.CheckBox();
+            this.series2_Axis_Checkbox = new System.Windows.Forms.CheckBox();
+            this.series1_Axis_Checkbox = new System.Windows.Forms.CheckBox();
             this.plotter_option_group = new System.Windows.Forms.GroupBox();
             this.graph_max = new System.Windows.Forms.NumericUpDown();
             this.set_graph_min_enable = new System.Windows.Forms.CheckBox();
@@ -108,14 +116,6 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.alert_messege = new System.Windows.Forms.NotifyIcon(this.components);
-            this.series1_Axis_Checkbox = new System.Windows.Forms.CheckBox();
-            this.series2_Axis_Checkbox = new System.Windows.Forms.CheckBox();
-            this.series3_Axis_Checkbox = new System.Windows.Forms.CheckBox();
-            this.series4_Axis_Checkbox = new System.Windows.Forms.CheckBox();
-            this.series5_Axis_Checkbox = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.serial_options_group.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -703,6 +703,83 @@
             this.tabPage2.Text = "Plotter";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 102);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(42, 17);
+            this.label8.TabIndex = 33;
+            this.label8.Text = "L/Min";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(702, 102);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(59, 17);
+            this.label6.TabIndex = 32;
+            this.label6.Text = "cm H2O";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(81, 452);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(105, 17);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "Secondary Axis";
+            // 
+            // series5_Axis_Checkbox
+            // 
+            this.series5_Axis_Checkbox.AutoSize = true;
+            this.series5_Axis_Checkbox.Location = new System.Drawing.Point(526, 452);
+            this.series5_Axis_Checkbox.Name = "series5_Axis_Checkbox";
+            this.series5_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
+            this.series5_Axis_Checkbox.TabIndex = 30;
+            this.series5_Axis_Checkbox.UseVisualStyleBackColor = true;
+            this.series5_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series5_Axis_Checkbox_CheckedChanged);
+            // 
+            // series4_Axis_Checkbox
+            // 
+            this.series4_Axis_Checkbox.AutoSize = true;
+            this.series4_Axis_Checkbox.Location = new System.Drawing.Point(455, 452);
+            this.series4_Axis_Checkbox.Name = "series4_Axis_Checkbox";
+            this.series4_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
+            this.series4_Axis_Checkbox.TabIndex = 29;
+            this.series4_Axis_Checkbox.UseVisualStyleBackColor = true;
+            this.series4_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series4_Axis_Checkbox_CheckedChanged);
+            // 
+            // series3_Axis_Checkbox
+            // 
+            this.series3_Axis_Checkbox.AutoSize = true;
+            this.series3_Axis_Checkbox.Location = new System.Drawing.Point(376, 452);
+            this.series3_Axis_Checkbox.Name = "series3_Axis_Checkbox";
+            this.series3_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
+            this.series3_Axis_Checkbox.TabIndex = 28;
+            this.series3_Axis_Checkbox.UseVisualStyleBackColor = true;
+            this.series3_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series3_Axis_Checkbox_CheckedChanged);
+            // 
+            // series2_Axis_Checkbox
+            // 
+            this.series2_Axis_Checkbox.AutoSize = true;
+            this.series2_Axis_Checkbox.Location = new System.Drawing.Point(295, 452);
+            this.series2_Axis_Checkbox.Name = "series2_Axis_Checkbox";
+            this.series2_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
+            this.series2_Axis_Checkbox.TabIndex = 27;
+            this.series2_Axis_Checkbox.UseVisualStyleBackColor = true;
+            this.series2_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series2_Axis_Checkbox_CheckedChanged);
+            // 
+            // series1_Axis_Checkbox
+            // 
+            this.series1_Axis_Checkbox.AutoSize = true;
+            this.series1_Axis_Checkbox.Location = new System.Drawing.Point(220, 452);
+            this.series1_Axis_Checkbox.Name = "series1_Axis_Checkbox";
+            this.series1_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
+            this.series1_Axis_Checkbox.TabIndex = 26;
+            this.series1_Axis_Checkbox.UseVisualStyleBackColor = true;
+            this.series1_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series1_Axis_Checkbox_CheckedChanged);
+            // 
             // plotter_option_group
             // 
             this.plotter_option_group.Controls.Add(this.graph_max);
@@ -1076,83 +1153,6 @@
             // 
             this.alert_messege.Text = "notifyIcon1";
             this.alert_messege.Visible = true;
-            // 
-            // series1_Axis_Checkbox
-            // 
-            this.series1_Axis_Checkbox.AutoSize = true;
-            this.series1_Axis_Checkbox.Location = new System.Drawing.Point(220, 452);
-            this.series1_Axis_Checkbox.Name = "series1_Axis_Checkbox";
-            this.series1_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
-            this.series1_Axis_Checkbox.TabIndex = 26;
-            this.series1_Axis_Checkbox.UseVisualStyleBackColor = true;
-            this.series1_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series1_Axis_Checkbox_CheckedChanged);
-            // 
-            // series2_Axis_Checkbox
-            // 
-            this.series2_Axis_Checkbox.AutoSize = true;
-            this.series2_Axis_Checkbox.Location = new System.Drawing.Point(295, 452);
-            this.series2_Axis_Checkbox.Name = "series2_Axis_Checkbox";
-            this.series2_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
-            this.series2_Axis_Checkbox.TabIndex = 27;
-            this.series2_Axis_Checkbox.UseVisualStyleBackColor = true;
-            this.series2_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series2_Axis_Checkbox_CheckedChanged);
-            // 
-            // series3_Axis_Checkbox
-            // 
-            this.series3_Axis_Checkbox.AutoSize = true;
-            this.series3_Axis_Checkbox.Location = new System.Drawing.Point(376, 452);
-            this.series3_Axis_Checkbox.Name = "series3_Axis_Checkbox";
-            this.series3_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
-            this.series3_Axis_Checkbox.TabIndex = 28;
-            this.series3_Axis_Checkbox.UseVisualStyleBackColor = true;
-            this.series3_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series3_Axis_Checkbox_CheckedChanged);
-            // 
-            // series4_Axis_Checkbox
-            // 
-            this.series4_Axis_Checkbox.AutoSize = true;
-            this.series4_Axis_Checkbox.Location = new System.Drawing.Point(455, 452);
-            this.series4_Axis_Checkbox.Name = "series4_Axis_Checkbox";
-            this.series4_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
-            this.series4_Axis_Checkbox.TabIndex = 29;
-            this.series4_Axis_Checkbox.UseVisualStyleBackColor = true;
-            this.series4_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series4_Axis_Checkbox_CheckedChanged);
-            // 
-            // series5_Axis_Checkbox
-            // 
-            this.series5_Axis_Checkbox.AutoSize = true;
-            this.series5_Axis_Checkbox.Location = new System.Drawing.Point(526, 452);
-            this.series5_Axis_Checkbox.Name = "series5_Axis_Checkbox";
-            this.series5_Axis_Checkbox.Size = new System.Drawing.Size(18, 17);
-            this.series5_Axis_Checkbox.TabIndex = 30;
-            this.series5_Axis_Checkbox.UseVisualStyleBackColor = true;
-            this.series5_Axis_Checkbox.CheckedChanged += new System.EventHandler(this.series5_Axis_Checkbox_CheckedChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(81, 452);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(105, 17);
-            this.label5.TabIndex = 31;
-            this.label5.Text = "Secondary Axis";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(702, 102);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(59, 17);
-            this.label6.TabIndex = 32;
-            this.label6.Text = "cm H2O";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(3, 102);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(42, 17);
-            this.label8.TabIndex = 33;
-            this.label8.Text = "L/Min";
             // 
             // MainForm
             // 

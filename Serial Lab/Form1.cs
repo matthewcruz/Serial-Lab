@@ -27,11 +27,15 @@ namespace Seriallab
     {
         public string data { get; set; }
         public string newData { get; set; }
-        public string oldData { get; set; } = "";
+        public string leftover_data { get; set; } = "";
+        public string prev_data { get; set; } = "";
+        public string rollover_data { get; set; } = "";
+
         int graph_scaler = 500;
         int send_repeat_counter = 0;
         bool send_data_flag = false;
         bool plotter_flag = false;
+        bool data_complete_flag = true;
         System.IO.StreamWriter out_file;
         System.IO.StreamReader in_file;
 
@@ -139,50 +143,55 @@ namespace Seriallab
                     byte[] dataRecevied = new byte[dataLength];
                     int nbytes = mySerial.Read(dataRecevied, 0, dataLength);
                     if (nbytes == 0) return;
-
-
-                    if (datalogger_checkbox.Checked)
-                    {
-                        try
-                        {
-                            if (oldData == "")
-                            {
-                                out_file.Write(data + "\n");//.Replace("\\n", Environment.NewLine));
-                            }
-                        }
-                        catch { alert("Can't write to " + datalogger_checkbox.Text + " file it might be not exist or it is opennd in another program"); return; }
-                    }
+                    //out_file.Write("Event:"+"["+System.Text.Encoding.Default.GetString(dataRecevied)+"]"+"\n");
 
 
                     this.BeginInvoke((Action)(() =>
                     {
                         newData = System.Text.Encoding.Default.GetString(dataRecevied);
+                        //out_file.Write("Inv{" + newData + "}"+"\n");
                         /*data is in format of a string
                         newData = is the incoming data to be checked
-                        oldData = is the data that is leftover*/
+                        leftover_data = is the data that is leftover*/
 
                         string[] checkData = newData.Split('\n');
                         int newDataLength = checkData.Length;
 
-                        if (oldData == "")
+                        if (leftover_data == "")
                         {
                             //previous data was complete, check new data
                             if (newData.EndsWith("\n") && newDataLength == 1) //Does the data end with "\n", is there only one "\n"
                             {
                                 //Data is complete, assign to data
                                 data = checkData[0];
-                                oldData = "";
+                                leftover_data = "";
+                                data_complete_flag = true;
+                                rollover_data = "";
                             }
                             else if (newDataLength > 1)
                             {
                                 //There is extra data, but the first index of the array is valid
-                                data = checkData[0];
-                                oldData = checkData[newDataLength - 1];
+                                data = checkData[0];                    //assign first index to data
+                                for (int i=1; i<newDataLength-1; i++)
+                                {
+                                    rollover_data += "\n" + checkData[i];  //if there are several data, add it to print data
+                                }
+                                if ((checkData[newDataLength - 1]).EndsWith("\n"))
+                                {
+                                    rollover_data += "\n" + checkData[newDataLength - 1];//data is complete
+                                }
+                                else
+                                {
+                                    leftover_data = checkData[newDataLength - 1];       //data is not complete
+                                }
+                                data_complete_flag = true;
                             }
                             else if (!newData.EndsWith("\n"))
                             {
                                 //Data is not complete save for next time
-                                oldData = checkData[0];
+                                leftover_data = checkData[0];
+                                data_complete_flag = false;
+                                rollover_data = "";
                                 return;
                             }
                         }
@@ -193,29 +202,44 @@ namespace Seriallab
                             //capture new data and add to old data
                             if (newData.EndsWith("\n") && newDataLength == 1)
                             {
-                                data = oldData + checkData[0];
-                                oldData = "";
+                                data = leftover_data + checkData[0];
+                                leftover_data = "";
+                                data_complete_flag = true;
                             }
                             else if (newDataLength > 1)
                             {
                                 //There is extra data, but the first index of the array is valid
-                                data = oldData + checkData[0];
-                                oldData = checkData[newDataLength - 1];
+                                data = leftover_data + checkData[0];
+                                data_complete_flag = true;
+                                for (int i = 1; i < newDataLength - 1; i++)
+                                {
+                                    rollover_data += "\n" + checkData[i];  //if there are several data, add it to print data
+                                }
+                                if ((checkData[newDataLength - 1]).EndsWith("\n"))
+                                {
+                                    rollover_data += "\n" + checkData[newDataLength - 1];//data is complete
+                                }
+                                else
+                                {
+                                    leftover_data = checkData[newDataLength - 1];       //data is not complete
+                                }
                             }
                             else if (!newData.EndsWith("\n"))
                             {
                                 //Data is not complete save for next time
-                                oldData = oldData + checkData[0];
+                                leftover_data += checkData[0];
+                                data_complete_flag = false;
                                 return;
                             }
+
                         }
                         //data is now in format of of string
 
                         if (!plotter_flag && !backgroundWorker1.IsBusy)
                         {
-                            if (display_hex_radiobutton.Checked)
-                                data = BitConverter.ToString(dataRecevied);           //data is converted to hex for Hex output
-                                data += "\n";
+                            if (display_hex_radiobutton.Checked) { 
+                                data = BitConverter.ToString(dataRecevied);           //this is actually sent to the datadata is converted to hex for Hex output                               
+                            }
 
                             backgroundWorker1.RunWorkerAsync();
                         }
@@ -244,7 +268,46 @@ namespace Seriallab
                             //Console.WriteLine();
                             graph.ResetAutoValues();
                         }
+                        if (datalogger_checkbox.Checked)
+                        {
+                            try
+                            {
+                                out_file.Write(data);
+
+                                if (data != prev_data)
+                                {
+                                    //out_file.Write(data+rollover_data);//.Replace("\\n", Environment.NewLine)); removed newline
+                                    //prev_data = data;
+                                    //rollover_data = "";
+                                }
+                                else
+                                {
+                                    ;
+                                }
+                            }
+                            catch { alert("Can't write to " + datalogger_checkbox.Text + " file it might be not exist or it is opennd in another program"); return; }
+ 
+                        }
                     }));
+
+                    if (datalogger_checkbox.Checked)
+                    {
+                        try
+                        {
+                            //out_file.Write(":N("+newData+")");
+                            if (data!=prev_data)
+                            {
+                                //out_file.Write(data+rollover_data);//.Replace("\\n", Environment.NewLine)); removed newline
+                                //prev_data = data;
+                                //rollover_data = "";
+                            }
+                            else
+                            {
+                                ;
+                            }
+                        }
+                        catch { alert("Can't write to " + datalogger_checkbox.Text + " file it might be not exist or it is opennd in another program"); return; }
+                    }
                 }
                 catch { alert("Can't read form  " + mySerial.PortName + " port it might be opennd in another program"); }
             }
